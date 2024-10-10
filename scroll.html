@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example Scroll Picture</title>
+
+</head>
+<body>
+    <button onclick=hello()> hello</button>
+
+   
+    <div id="scroll-picture-container"></div>
+
+    
+</body>
+
+<script>
+    function hello(){
+        var UIPopupsPicker = api.require('UIPopupsPicker');
+    UIPopupsPicker.open({
+        rect:{
+        x: 30,                                   
+        y: 100,                                  
+        w: api.frameWidth - 60,                 
+        h: 245                            
+    },
+    styles:{
+    maskBg:'rgba(0,0,0,0.5)',
+    bg:'#fff',
+    button: {                           
+            size: 12,
+            titleColor:'#00000'                      
+            },
+    color:'#5B5B5B',
+    resource:'widget://res/city.json', 
+    fontColor: '#000000', 
+    selectedColor:'#8B0000',                 
+    },
+        fixedOn: api.frameName,
+        fixed:true,
+    }, function(ret, err) {
+        if (ret) {
+            api.alert({
+                msg: JSON.stringify(ret)
+            })
+        } else {
+            api.alert({
+                msg: JSON.stringify(err)
+            })
+        }
+    });
+    }
+    
+</script>
+</html>
+
+
+

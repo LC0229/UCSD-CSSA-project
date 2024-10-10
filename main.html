@@ -1,0 +1,203 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width" />
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>UCSD-CSSA-APP</title>
+    <link rel="stylesheet" type="text/css" href="../css/apiutil.css" />
+    <style>
+        body,
+        html {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f0f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }    
+        button {
+            padding: 2vh 8vw;
+            font-size: 1em;
+            border-radius: 5%;
+        }
+
+        .header {
+            width: 100%;
+            top: 0;
+            position: fixed;
+            height: 50px;
+        }
+
+        .footer {
+            display: flex;
+            justify-content: space-around;
+            position: fixed;
+            bottom: 0;
+            border: 1px solid #000;
+            border-radius: 25vw;
+            width: 90%;
+            background-color: white;
+            border-top: rgb(0, 0, 0) 0.5px solid;
+            height: 7vh;
+        }
+
+        .footer div {
+            width: 5vw;
+            height: 5vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .footer img {
+            height: 5vh;
+            width: 5vw;
+        }
+
+        .footer .letter {
+            font-size: 3vw;
+            color: grey;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header"></div>
+
+    <div class="main_frame" id='main_frame'></div>
+
+    <footer class="footer">
+        <div id="mainpage" tapmode onclick="openWin('main', 'main.html');">
+            <img src="../image/mainpage.png" class="icon"/>
+            <div class="letter">主页</div>
+        </div>
+        <div id="forum" tapmode onclick="openWin('forum', 'forum.html');">
+            <img src="../image/forum.png" class="icon" />
+            <div class="letter">论坛</div>
+        </div>
+        <div id="personal" tapmode onclick="openWin('personal', 'personal_frame.html');">
+            <img src="../image/personal.png" class="icon"/>
+            <div class="letter">个人</div>
+        </div>
+    </footer>
+</body>
+<script type="text/javascript" src="../script/apiutil.js"></script>
+<script type="text/javascript">
+    apiready = function () {
+        var str = '';
+        str += '';
+        $api.byId('main_frame').innerHTML = str;
+
+        var header = $api.dom('header'); // 获取 header 标签元素
+        var footer = $api.dom('footer'); // 获取 footer 标签元素
+        var headerH = $api.fixStatusBar(header);
+        var footerH = $api.fixTabBar(footer);
+
+        api.openFrame({
+            name: 'main_frame',
+            url: 'main_frame.html',
+            bounces: true,
+
+        });
+
+        };
+        
+    function openWindow(pageName, pageUrl) {
+        api.openWin({
+            name: pageName,
+            url: pageUrl,
+            bounces: true,
+            rect: { // 使用Margin布局适配屏幕动态变化
+                w: 'auto' // 页面宽度 自适应屏幕宽度
+            }
+        });
+    }
+    
+    function openFrame(pageName, pageUrl) {
+        var header = $api.dom('header');
+        var footer = $api.dom('footer');
+
+        var headerH = $api.fixStatusBar(header);
+        var footerH = $api.fixTabBar(footer);
+
+        api.openFrame({
+            name: pageName,
+            url: pageUrl,
+            bounces: true,
+            rect: { // 推荐使用Margin布局，用于适配屏幕的动态变化
+                marginTop: headerH,
+                marginBottom: footerH,
+                w: 'auto' // main页面的宽度 自适应屏幕宽度
+            }
+        });
+
+    }
+
+    function setImage(elementId, imagePath) {
+        const element = document.getElementById(elementId);
+        if (element){
+            element.style.backgroundImage = `url('${'../image/sth.png'}')`;
+        }
+    }
+        function handleRefresh() {
+            let totalRefreshCount = api.getGlobalData({key: 'totalRefreshCount'}) || 0;
+
+            totalRefreshCount++;
+
+            api.setGlobalData({key: 'totalRefreshCount', value: totalRefreshCount});
+
+            var dialogBox = api.require('dialogBox');
+            dialogBox.alert({
+                texts: {
+                    title: "Reminder",
+                    content: `Total refreshes: ${totalRefreshCount}\n`,
+                    leftBtnTitle: 'OK',
+                },
+                styles: {
+                    bg: '#fff',
+                    w: 300,
+                    h: 200,
+                    corner: 8,
+                    title: {
+                        marginT: 20,
+                        iconSize: 40,
+                        titleSize: 14,
+                        titleColor: '#000',
+                        icon: 'widget://res/gou.png'           
+                    },
+                    content: {
+                        marginT: 40,
+                        size: 16,
+                        color: '#000'
+                    },
+                    left: {
+                        marginB: 20,
+                        w: 120,
+                        h: 35,
+                        corner: 2,
+                        bg: '#007AFF',
+                        color: '#fff',
+                        size: 16
+                    }
+                },
+                tapClose: true
+            }, function(ret) {
+                if (ret.eventType == 'left') {
+                    var dialogBox = api.require('dialogBox');
+                    dialogBox.close({
+                    dialogName: 'alert'
+                    });
+                }   
+            });
+            api.refreshHeaderLoadDone();
+        }
+</script>
+</html>
